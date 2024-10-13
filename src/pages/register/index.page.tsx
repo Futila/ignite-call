@@ -5,6 +5,8 @@ import { z } from 'zod'
 import { Button, Heading, MultiStep, Text, TextInput } from '@ignite-ui/react'
 import { ArrowRight } from 'phosphor-react'
 import { Container, Form, Header, FormError } from './styles'
+import { useRouter } from 'next/router'
+import { useEffect } from 'react'
 
 const registerFormSchema = z.object({
   username: z
@@ -24,10 +26,21 @@ export default function Register() {
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors, isSubmitting },
   } = useForm<RegisterFormData>({
     resolver: zodResolver(registerFormSchema),
   })
+
+  const router = useRouter()
+
+  useEffect(() => {
+    if (router.query.username) {
+      // setValue to set a form field in a manual way, a programtic way
+      setValue('username', String(router.query.username))
+    }
+  }, [router.query?.username, setValue])
+
   function handleRegister(data: RegisterFormData) {
     console.log(data)
   }

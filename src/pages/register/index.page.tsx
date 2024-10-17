@@ -7,6 +7,7 @@ import { ArrowRight } from 'phosphor-react'
 import { Container, Form, Header, FormError } from './styles'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
+import { api } from '@/lib/api'
 
 const registerFormSchema = z.object({
   username: z
@@ -41,8 +42,15 @@ export default function Register() {
     }
   }, [router.query?.username, setValue])
 
-  function handleRegister(data: RegisterFormData) {
-    console.log(data)
+  async function handleRegister(data: RegisterFormData) {
+    try {
+      await api.post('/users', {
+        name: data.name,
+        username: data.username,
+      })
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   return (
